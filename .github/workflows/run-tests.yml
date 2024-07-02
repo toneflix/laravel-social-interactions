@@ -56,7 +56,7 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: ./vendor/bin/pest --ci
+        run: composer test
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
