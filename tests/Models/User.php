@@ -4,7 +4,6 @@ namespace ToneflixCode\SocialInteractions\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use ToneflixCode\SocialInteractions\Models\Notification;
 use ToneflixCode\SocialInteractions\Traits\CanSocialInteract;
 
 class User extends Authenticatable
