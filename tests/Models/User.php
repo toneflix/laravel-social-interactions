@@ -8,8 +8,8 @@ use ToneflixCode\SocialInteractions\Traits\CanSocialInteract;
 
 class User extends Authenticatable
 {
-    use HasFactory;
     use CanSocialInteract;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

@@ -128,7 +128,7 @@ test('Is able to generate interaction data for the model', function () {
     config([
         'social-interactions.enable_dislikes' => true,
         'social-interactions.enable_reactions' => true,
-        'social-interactions.multiple_votes' => true
+        'social-interactions.multiple_votes' => true,
     ]);
 
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();

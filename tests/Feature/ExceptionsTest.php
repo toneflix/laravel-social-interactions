@@ -32,4 +32,4 @@ it('throws exception if reacting when reactions are disabled', function () {
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
     $user->leaveReaction(Post::factory()->create(), 'love');
-})->throws(InvalidInteractionException::class, "Reactions are disabled.");
+})->throws(InvalidInteractionException::class, 'Reactions are disabled.');

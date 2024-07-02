@@ -26,9 +26,9 @@ abstract class TestCase extends Orchestra
 
         config()->set('app.faker_locale', 'en_NG');
 
-        $migration = include __DIR__ . '/database/migrations/create_posts_tables.php';
+        $migration = include __DIR__.'/database/migrations/create_posts_tables.php';
         $migration->up();
-        $migration2 = include __DIR__ . '/database/migrations/create_users_tables.php';
+        $migration2 = include __DIR__.'/database/migrations/create_users_tables.php';
         $migration2->up();
     }
 
@@ -37,10 +37,10 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'ToneflixCode\\SocialInteractions\\Tests\\Database\\Factories\\' .
+            fn (string $modelName) => 'ToneflixCode\\SocialInteractions\\Tests\\Database\\Factories\\'.
                 class_basename(
                     $modelName
-                ) . 'Factory'
+                ).'Factory'
         );
     }
 

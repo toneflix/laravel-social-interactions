@@ -3,12 +3,12 @@
 namespace ToneflixCode\SocialInteractions\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
-use ToneflixCode\SocialInteractions\Models\SocialInteraction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use ToneflixCode\SocialInteractions\Events\SocialInteractionDone;
 use ToneflixCode\SocialInteractions\Exception\InvalidInteractionException;
+use ToneflixCode\SocialInteractions\Models\SocialInteraction;
 use ToneflixCode\SocialInteractions\Models\SocialInteractionSave;
 
 /**
@@ -28,11 +28,8 @@ trait HasSocialInteractions
 
     /**
      * Get all the interaction data for this model
-     *
-     * @param Model|CanSocialInteract|null $interactor
-     * @return Collection
      */
-    public function socialInteractionData(Model|CanSocialInteract $interactor = null): Collection
+    public function socialInteractionData(Model|CanSocialInteract|null $interactor = null): Collection
     {
         $data = new Collection([
             'votes' => $this->socialInteractions()->sum('votes'),
@@ -81,10 +78,6 @@ trait HasSocialInteractions
 
     /**
      * Leave a reaction on the model
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @param int|string|bool $reaction
-     * @return SocialInteraction
      */
     public function react(Model|CanSocialInteract $interactor, int|string|bool $reaction): SocialInteraction
     {
@@ -92,17 +85,17 @@ trait HasSocialInteractions
         $allowed = in_array($reaction, $a_list);
         $reactions = array_merge(config('social-interactions.available_reactions'), ['dislike']);
 
-        if (!is_bool($reaction) && !$allowed && !in_array($reaction, $reactions)) {
+        if (! is_bool($reaction) && ! $allowed && ! in_array($reaction, $reactions)) {
             throw InvalidInteractionException::invalidReaction();
         }
 
-        if (!config('social-interactions.enable_dislikes', false) && $reaction === 'dislike') {
+        if (! config('social-interactions.enable_dislikes', false) && $reaction === 'dislike') {
             throw InvalidInteractionException::dislikeDisabled();
         }
 
         if (
             in_array($reaction, array_merge(array_slice($a_list, 2), config('social-interactions.available_reactions', [])), true) &&
-            !config('social-interactions.enable_reactions', false) &&
+            ! config('social-interactions.enable_reactions', false) &&
             $reaction !== 'like'
         ) {
             throw InvalidInteractionException::reactionsDisabled();
@@ -113,9 +106,9 @@ trait HasSocialInteractions
             'interactor_type' => $interactor->getMorphClass(),
         ]);
 
-        $liked = in_array($reaction, ['like', 1, true], true) ? (!$interaction?->liked) : false;
+        $liked = in_array($reaction, ['like', 1, true], true) ? (! $interaction?->liked) : false;
         $interaction->liked = $reaction === 'dislike' ? false : $liked;
-        $interaction->disliked = $reaction === 'dislike' ? !$interaction?->disliked : false;
+        $interaction->disliked = $reaction === 'dislike' ? ! $interaction?->disliked : false;
         $interaction->reaction = $reaction;
         $interaction->save();
 
@@ -123,7 +116,7 @@ trait HasSocialInteractions
             ? 'liked'
             : (config('social-interactions.enable_reactions', false)
                 ? 'reaction'
-                : (['', 'liked'][$reaction] ?? $reaction . 'd')
+                : (['', 'liked'][$reaction] ?? $reaction.'d')
             );
 
         SocialInteractionDone::dispatch($interaction, $set);
@@ -133,10 +126,6 @@ trait HasSocialInteractions
 
     /**
      * Save a model
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @param bool $save
-     * @return SocialInteraction
      */
     public function toggleSave(Model|CanSocialInteract $interactor, bool $save = true): SocialInteraction
     {
@@ -154,12 +143,6 @@ trait HasSocialInteractions
 
     /**
      * Save a model to list
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @param bool $save
-     * @param string $list_name
-     * @param bool $public
-     * @return SocialInteractionSave
      */
     public function toggleSaveToList(
         Model|CanSocialInteract $interactor,
@@ -167,7 +150,7 @@ trait HasSocialInteractions
         string $list_name = 'default',
         bool $public = false,
     ): SocialInteractionSave {
-        if (!config('social-interactions.enable_save_lists', false)) {
+        if (! config('social-interactions.enable_save_lists', false)) {
             throw InvalidInteractionException::saveListDisabled();
         }
 
@@ -191,10 +174,6 @@ trait HasSocialInteractions
 
     /**
      * Vote for a model
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @param bool $vote
-     * @return SocialInteraction
      */
     public function giveVote(Model|CanSocialInteract $interactor, bool $vote = true): SocialInteraction
     {
@@ -205,7 +184,7 @@ trait HasSocialInteractions
 
         if ($vote === true && ($interaction->votes < 1 || config('social-interactions.multiple_votes', false))) {
             $interaction->increment('votes');
-        } else if (config('social-interactions.enable_unvote', false)) {
+        } elseif (config('social-interactions.enable_unvote', false)) {
             $interaction->votes = 0;
             $interaction->save();
         }
@@ -217,9 +196,6 @@ trait HasSocialInteractions
 
     /**
      * Get the reaction for the specified reactor
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @return SocialInteraction
      */
     public function modelInteraction(Model|CanSocialInteract $interactor): SocialInteraction
     {
@@ -231,10 +207,6 @@ trait HasSocialInteractions
 
     /**
      * Check if a model has been saved
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @param string|null $list
-     * @return bool
      */
     public function isSaved(Model|CanSocialInteract $interactor, ?string $list = null): bool
     {
@@ -243,11 +215,6 @@ trait HasSocialInteractions
 
     /**
      * Scope to return only saved models
-     *
-     * @param Builder $query
-     * @param Model|CanSocialInteract $interactor
-     * @param string|null $list
-     * @return void
      */
     public function scopeFilterSaved(Builder $query, Model|CanSocialInteract $interactor, ?string $list = null): void
     {
@@ -266,9 +233,6 @@ trait HasSocialInteractions
 
     /**
      * Check if a model has been voted for
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @return bool
      */
     public function isVoted(Model|CanSocialInteract $interactor): bool
     {
@@ -277,10 +241,6 @@ trait HasSocialInteractions
 
     /**
      * Scope to return only voted models
-     *
-     * @param Builder $query
-     * @param Model|CanSocialInteract $interactor
-     * @return void
      */
     public function scopeIsVoted(Builder $query, Model|CanSocialInteract $interactor): void
     {
@@ -294,9 +254,6 @@ trait HasSocialInteractions
 
     /**
      * Check if a model has been reacted to
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @return bool
      */
     public function isReacted(Model|CanSocialInteract $interactor): bool
     {
@@ -305,10 +262,6 @@ trait HasSocialInteractions
 
     /**
      * Scope to return only models reacted to
-     *
-     * @param Builder $query
-     * @param Model|CanSocialInteract $interactor
-     * @return void
      */
     public function scopeIsReacted(Builder $query, Model|CanSocialInteract $interactor): void
     {
@@ -325,9 +278,6 @@ trait HasSocialInteractions
 
     /**
      * Check if a model has been liked
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @return bool
      */
     public function isLiked(Model|CanSocialInteract $interactor): bool
     {
@@ -336,10 +286,6 @@ trait HasSocialInteractions
 
     /**
      * Scope to return only liked models
-     *
-     * @param Builder $query
-     * @param Model|CanSocialInteract $interactor
-     * @return void
      */
     public function scopeIsLiked(Builder $query, Model|CanSocialInteract $interactor): void
     {
@@ -355,9 +301,6 @@ trait HasSocialInteractions
 
     /**
      * Check if a model has been disliked
-     *
-     * @param Model|CanSocialInteract $interactor
-     * @return bool
      */
     public function isDisliked(Model|CanSocialInteract $interactor): bool
     {
@@ -366,10 +309,6 @@ trait HasSocialInteractions
 
     /**
      * Scope to return only liked models
-     *
-     * @param Builder $query
-     * @param Model|CanSocialInteract $interactor
-     * @return void
      */
     public function scopeIsDisliked(Builder $query, Model|CanSocialInteract $interactor): void
     {

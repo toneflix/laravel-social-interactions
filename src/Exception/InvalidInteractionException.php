@@ -14,7 +14,7 @@ class InvalidInteractionException extends \Exception
     public static function message(Model|HasSocialInteractions $model): self
     {
         return new self(
-            $model->getMorphClass() . ' is not using the ToneflixCode\SocialInteractions\Traits\HasSocialInteractions trait'
+            $model->getMorphClass().' is not using the ToneflixCode\SocialInteractions\Traits\HasSocialInteractions trait'
         );
     }
 
@@ -22,9 +22,9 @@ class InvalidInteractionException extends \Exception
     {
         if (config('social-interactions.enable_reactions')) {
             return new static(
-                join('', [
-                    "Invalid reaction, supported reactions include: ",
-                    collect(config('social-interactions.available_reactions'))->map(fn ($r, $i) => ($i + 1) . ": $r")->join(', ')
+                implode('', [
+                    'Invalid reaction, supported reactions include: ',
+                    collect(config('social-interactions.available_reactions'))->map(fn ($r, $i) => ($i + 1).": $r")->join(', '),
                 ])
             );
         }

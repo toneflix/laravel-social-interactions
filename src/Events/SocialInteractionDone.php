@@ -19,6 +19,5 @@ class SocialInteractionDone implements ShouldDispatchAfterCommit
     public function __construct(
         public SocialInteraction|SocialInteractionSave $interaction,
         public string $action,
-    ) {
-    }
+    ) {}
 }

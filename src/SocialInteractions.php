@@ -35,8 +35,6 @@ class SocialInteractions
     /**
      * Call methods on the first dynamically caught parameter
      *
-     * @param string $name
-     * @param array $params
      * @return void
      */
     public function __call(string $name, array $params)
