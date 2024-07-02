@@ -2,9 +2,9 @@
 
 [![Test & Lint](https://github.com/toneflix/laravel-social-interactions/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/toneflix/laravel-social-interactions/actions/workflows/php.yml)
 [![Latest Stable Version](http://poser.pugx.org/toneflix-code/social-interactions/v)](https://packagist.org/packages/toneflix-code/social-interactions) [![Total Downloads](http://poser.pugx.org/toneflix-code/social-interactions/downloads)](https://packagist.org/packages/toneflix-code/social-interactions) [![Latest Unstable Version](http://poser.pugx.org/toneflix-code/social-interactions/v/unstable)](https://packagist.org/packages/toneflix-code/social-interactions) [![License](http://poser.pugx.org/toneflix-code/social-interactions/license)](https://packagist.org/packages/toneflix-code/social-interactions) [![PHP Version Require](http://poser.pugx.org/toneflix-code/social-interactions/require/php)](https://packagist.org/packages/toneflix-code/social-interactions)
-[![codecov](https://codecov.io/gh/toneflix/laravel-social-interactions/graph/badge.svg?token=SHm1zYOgLH)](https://codecov.io/gh/toneflix/laravel-social-interactions)
+[![codecov](https://codecov.io/gh/toneflix/laravel-social-interactions/graph/badge.svg?token=WJfyCnmcZS)](https://codecov.io/gh/toneflix/laravel-social-interactions)
 
-<!-- ![GitHub Actions](https://github.com/toneflix/laravel-social-interactions/actions/workflows/main.yml/badge.svg) -->
+<!-- ![GitHub Actions](https://github.com/toneflix/laravel-social-interactions/actions/workflows/run-tests.yml/badge.svg) -->
 
 Laravel Social Interactions adds to your project the ability to create social interactions like **saves, votes, likes, dislikes, reactions, Etc.** with your models.
 
