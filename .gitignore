@@ -1,3 +1,5 @@
+.env
+.updated
 .idea
 .phpunit.cache
 build
