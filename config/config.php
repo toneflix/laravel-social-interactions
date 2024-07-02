@@ -8,8 +8,8 @@ return [
 
     'multiple_votes' => false,
     'enable_unvote' => false,
-    'enable_dislikes' => true,
-    'enable_reactions' => true,
+    'enable_dislikes' => false,
+    'enable_reactions' => false,
     'enable_save_lists' => false,
 
     'available_reactions' => [

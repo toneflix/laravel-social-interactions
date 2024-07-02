@@ -2,7 +2,9 @@
 
 namespace ToneflixCode\SocialInteractions\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 final class SocialInteractionSave extends Model
 {
@@ -12,6 +14,8 @@ final class SocialInteractionSave extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'interactor_type',
+        'interactor_id',
         'list_name',
         'public',
     ];
@@ -36,5 +40,15 @@ final class SocialInteractionSave extends Model
         return [
             'public' => 'boolean',
         ];
+    }
+
+    public function saveable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function scopeList(Builder $query, $list = 'default'): void
+    {
+        $query->whereListName($list);
     }
 }

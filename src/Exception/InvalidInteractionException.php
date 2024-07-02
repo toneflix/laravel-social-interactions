@@ -3,6 +3,7 @@
 namespace ToneflixCode\SocialInteractions\Exception;
 
 use Illuminate\Database\Eloquent\Model;
+use ToneflixCode\SocialInteractions\Traits\HasSocialInteractions;
 
 /**
  * Exception thrown when attempting to interact with a model that does not
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class InvalidInteractionException extends \Exception
 {
-    public static function message(Model $model): self
+    public static function message(Model|HasSocialInteractions $model): self
     {
         return new self(
             $model->getMorphClass() . ' is not using the ToneflixCode\SocialInteractions\Traits\HasSocialInteractions trait'
@@ -34,6 +35,11 @@ class InvalidInteractionException extends \Exception
     public static function dislikeDisabled(): self
     {
         return new static('Dislike are disabled.');
+    }
+
+    public static function saveListDisabled(): self
+    {
+        return new static('Saving to lists is disabled.');
     }
 
     public static function reactionsDisabled(): self

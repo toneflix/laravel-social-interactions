@@ -4,6 +4,8 @@ use ToneflixCode\SocialInteractions\Tests\Models\Post;
 
 test('can react "like" to item', function () {
 
+    config(['social-interactions.enable_reactions' => true]);
+
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
     $r1 = $user->leaveReaction(Post::factory()->create(), 1);
@@ -14,6 +16,7 @@ test('can react "like" to item', function () {
 });
 
 test('can react "love" to item', function () {
+    config(['social-interactions.enable_reactions' => true]);
 
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
@@ -26,6 +29,8 @@ test('can react "love" to item', function () {
 
 test('can react "haha" to item', function () {
 
+    config(['social-interactions.enable_reactions' => true]);
+
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
     $r1 = $user->leaveReaction(Post::factory()->create(), 3);
@@ -36,6 +41,8 @@ test('can react "haha" to item', function () {
 });
 
 test('can react "wow" to item', function () {
+
+    config(['social-interactions.enable_reactions' => true]);
 
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
@@ -48,6 +55,8 @@ test('can react "wow" to item', function () {
 
 test('can react "sad" to item', function () {
 
+    config(['social-interactions.enable_reactions' => true]);
+
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
     $r1 = $user->leaveReaction(Post::factory()->create(), 5);
@@ -58,6 +67,8 @@ test('can react "sad" to item', function () {
 });
 
 test('can react "angry" to item', function () {
+
+    config(['social-interactions.enable_reactions' => true]);
 
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 

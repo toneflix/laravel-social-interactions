@@ -39,10 +39,11 @@ class Reaction implements CastsAttributes
             if (is_bool($val)) {
                 $reaction = $val ? 1 : 0;
             } elseif (is_string($val)) {
-                $reaction = array_key_first(Arr::where(
-                    config('social-interactions.available_reactions', []),
+                $reactions = config('social-interactions.available_reactions', []);
+                $reaction = in_array($val, $reactions) ? array_key_first(Arr::where(
+                    $reactions,
                     fn ($v) => $v === $val
-                )) + 1;
+                )) + 1 : null;
             } else {
                 $reaction = $val;
             }

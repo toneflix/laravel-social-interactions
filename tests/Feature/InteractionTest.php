@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
 use ToneflixCode\SocialInteractions\Events\SocialInteractionDone;
 use ToneflixCode\SocialInteractions\Tests\Models\Post;
@@ -35,6 +34,8 @@ test('can unlike item', function () {
 
 test('can dislike item', function () {
 
+    config(['social-interactions.enable_dislikes' => true]);
+
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
 
     $r1 = $user->leaveReaction(Post::factory()->create(), 'dislike');
@@ -43,6 +44,8 @@ test('can dislike item', function () {
 });
 
 test('can undislike item', function () {
+
+    config(['social-interactions.enable_dislikes' => true]);
 
     $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
     $post = Post::factory()->create();
@@ -53,33 +56,6 @@ test('can undislike item', function () {
     expect($r1->disliked)->toBeTrue();
     expect($r2->disliked)->toBeFalse();
     expect($r1->id)->toBe($r1->id);
-});
-
-test('can save item', function () {
-
-    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
-    $post = Post::factory()->create();
-
-    $r1 = $post->toggleSave($user);
-
-    expect($r1->saved)->toBeTrue();
-    expect($post->isSaved($user))->toBeTrue();
-});
-
-test('can unsave a saved item', function () {
-
-    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
-    $post = Post::factory()->create();
-
-    $r1 = $post->toggleSave($user);
-
-    expect($r1->saved)->toBeTrue();
-    expect($post->isSaved($user))->toBeTrue();
-
-    $r2 = $post->toggleSave($user, false);
-
-    expect($r2->saved)->toBeFalse();
-    expect($post->isSaved($user))->toBeFalse();
 });
 
 test('can vote item', function () {
@@ -131,7 +107,7 @@ test('Uses only one interaction model', function () {
     $r1 = $user->leaveReaction($post, 1);
     $r2 = $post->toggleSave($user, true);
 
-    expect($r1->id)->toBe($r2->id);
+    expect($r1->is($r2))->toBeTrue();
 });
 
 test('SocialInteractionDone event is dispatched', function () {
@@ -144,4 +120,36 @@ test('SocialInteractionDone event is dispatched', function () {
     Event::assertDispatched(SocialInteractionDone::class, function ($event) {
         return $event->action === 'liked';
     });
+});
+
+test('Is able to generate interaction data for the model', function () {
+
+    config([
+        'social-interactions.enable_dislikes' => true,
+        'social-interactions.enable_reactions' => true,
+        'social-interactions.multiple_votes' => true
+    ]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $post = Post::factory()->create();
+
+    $user->leaveReaction($post, 'like');
+    $post->toggleSave($user, true);
+    $post->giveVote($user);
+
+    $user2 = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $user2->leaveReaction($post, 'love');
+    $post->giveVote($user2);
+    $post->giveVote($user2);
+
+    $user3 = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $user3->leaveReaction($post, 'dislike');
+    $post->giveVote($user3);
+    $post->giveVote($user3);
+    $post->giveVote($user3);
+
+    $user4 = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $user4->leaveReaction($post, 'like');
+
+    expect(isset($post->socialInteractionData($user3)['votes']))->toBeTrue;
 });

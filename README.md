@@ -6,12 +6,13 @@
 
 <!-- ![GitHub Actions](https://github.com/toneflix/laravel-social-interactions/actions/workflows/main.yml/badge.svg) -->
 
-Laravel Social Interactions adds to your project the ability to create social interactions like **saves, likes, dislikes, reactions, Etc.** with your models.
+Laravel Social Interactions adds to your project the ability to create social interactions like **saves, votes, likes, dislikes, reactions, Etc.** with your models.
 
 ## Use Cases
 
-1. Friend Requests
-2. Access Requests
+1. Voting System (Upvoting and Downvoting)
+2. Bookmarking System
+3. Liking and Reaction System
 3. Anything that requires a third party user to approve or reject.
 
 ## Installation

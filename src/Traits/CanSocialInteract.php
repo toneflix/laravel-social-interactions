@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use ToneflixCode\SocialInteractions\Exception\InvalidInteractionException;
 use ToneflixCode\SocialInteractions\Models\SocialInteraction;
+use ToneflixCode\SocialInteractions\Models\SocialInteractionSave;
 
 use function Pest\Laravel\delete;
 
@@ -14,6 +15,11 @@ trait CanSocialInteract
     public function socialInteracts(): MorphMany
     {
         return $this->morphMany(SocialInteraction::class, 'interactor');
+    }
+
+    public function savedSocialInteracts(): MorphMany
+    {
+        return $this->morphMany(SocialInteractionSave::class, 'interactor');
     }
 
     /**
@@ -26,7 +32,7 @@ trait CanSocialInteract
     public function leaveReaction(Model $interactable, int|string|bool $reaction): SocialInteraction
     {
         if (!method_exists($interactable, 'react')) {
-            throw new InvalidInteractionException();
+            throw InvalidInteractionException::message($interactable);
         }
 
         return $interactable->react($this, $reaction);
