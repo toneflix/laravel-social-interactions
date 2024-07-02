@@ -33,7 +33,7 @@
         "imanghafoori/php-imports-analyzer": "^1.0",
         "laravel/pint": "^1.15",
         "orchestra/testbench": "^9.1",
-        "pestphp/pest": "2.34",
+        "pestphp/pest": "^2.34",
         "pestphp/pest-plugin-laravel": "^2.4"
     },
     "autoload": {
