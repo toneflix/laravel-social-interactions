@@ -9,9 +9,14 @@ use ToneflixCode\SocialInteractions\Traits\HasSocialInteractions;
  * Exception thrown when attempting to interact with a model that does not
  * use the HasSocialInteractions trait.
  */
-class InvalidInteractionException extends \Exception
+final class InvalidInteractionException extends \Exception
 {
-    public static function message(Model|HasSocialInteractions $model): self
+    /**
+     *
+     * @param Model|HasSocialInteractions $model
+     * @return self
+     */
+    public static function message(Model $model): self
     {
         return new self(
             $model->getMorphClass() . ' is not using the ToneflixCode\SocialInteractions\Traits\HasSocialInteractions trait'
