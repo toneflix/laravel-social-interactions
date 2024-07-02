@@ -31,6 +31,16 @@ final class SocialInteractionSave extends Model
     ];
 
     /**
+     * Get the table associated with the model
+     *
+     * @return string
+     */
+    public function getTable(): string
+    {
+        return config('social-interactions.tables.saves', 'social_interaction_saves');
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

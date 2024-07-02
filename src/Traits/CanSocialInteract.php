@@ -2,14 +2,17 @@
 
 namespace ToneflixCode\SocialInteractions\Traits;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 use ToneflixCode\SocialInteractions\Exception\InvalidInteractionException;
 use ToneflixCode\SocialInteractions\Models\SocialInteraction;
 use ToneflixCode\SocialInteractions\Models\SocialInteractionSave;
 
-use function Pest\Laravel\delete;
-
+/**
+ * @property Collection $saved_social_lists Get the names of all social lists created
+ */
 trait CanSocialInteract
 {
     public function socialInteracts(): MorphMany
@@ -23,13 +26,42 @@ trait CanSocialInteract
     }
 
     /**
-     * Undocumented function
+     * Get the names of all social lists created
      *
-     * @param HasSocialInteractions $interactable
+     * @return Attribute
+     */
+    public function savedSocialLists(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->savedSocialInteracts()->groupBy('list_name')->pluck('list_name')
+        );
+    }
+
+    /**
+     * Delete a particular saved list or all list
+     *
+     * @param string|bool $name
+     * @return Collection
+     */
+    public function deleteSavedSocialList(string|bool $name): Collection
+    {
+        if ($name === true) {
+            $this->savedSocialInteracts()->delete();
+        } else {
+            $this->savedSocialInteracts()->whereListName($name)->delete();
+        }
+
+        return $this->saved_social_lists;
+    }
+
+    /**
+     * Leave a reaction on a model
+     *
+     * @param Model|HasSocialInteractions $interactable
      * @param integer|string $reaction
      * @return SocialInteraction
      */
-    public function leaveReaction(Model $interactable, int|string|bool $reaction): SocialInteraction
+    public function leaveReaction(Model|HasSocialInteractions $interactable, int|string|bool $reaction): SocialInteraction
     {
         if (!method_exists($interactable, 'react')) {
             throw InvalidInteractionException::message($interactable);

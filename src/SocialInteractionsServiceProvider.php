@@ -21,7 +21,7 @@ class SocialInteractionsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('social-interactions.php'),
-            ], 'social-interactions');
+            ], 'social-interactions-config');
 
             $check = fn (string $table) => empty(array_filter(
                 File::files(base_path('database/migrations')),
@@ -33,13 +33,13 @@ class SocialInteractionsServiceProvider extends ServiceProvider
             if ($check('create_social_interactions_table')) {
                 $this->publishes([
                     __DIR__ . '/../database/migrations/2024_06_30_213055_create_social_interactions_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_interactions_table.php'),
-                ], 'social-interactions');
+                ], 'social-interactions-migrations');
             }
 
             if ($check('create_social_interaction_saves_table')) {
                 $this->publishes([
                     __DIR__ . '/../database/migrations/2024_06_30_213055_create_social_interaction_saves_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_interaction_saves_table.php'),
-                ], 'social-interactions');
+                ], 'social-interactions-migrations');
             }
         }
     }

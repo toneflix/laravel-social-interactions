@@ -51,6 +51,16 @@ final class SocialInteraction extends Model
         'reaction' => Reaction::class,
     ];
 
+    /**
+     * Get the table associated with the model
+     *
+     * @return string
+     */
+    public function getTable(): string
+    {
+        return config('social-interactions.tables.interactions', 'social_interactions');
+    }
+
     public function interactable(): MorphTo
     {
         return $this->morphTo();

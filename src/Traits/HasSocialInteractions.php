@@ -27,7 +27,7 @@ trait HasSocialInteractions
     }
 
     /**
-     * Get all the interactino data for this model
+     * Get all the interaction data for this model
      *
      * @param Model|CanSocialInteract|null $interactor
      * @return Collection
@@ -42,7 +42,22 @@ trait HasSocialInteractions
         ]);
 
         if ($interactor) {
-            $interaction = $this->interactorReaction($interactor);
+            $interaction = $this->modelInteraction($interactor);
+
+            $icons = config('social-interactions.icon_classes');
+            $colors = config('social-interactions.reaction_colors');
+
+            $reaction_icon = $icons['like'][0];
+            $reaction_color = $colors['like'];
+
+            if ($interaction->reaction) {
+                $reaction_icon = collect($icons)->first(fn ($i, $k) => $k === $interaction->reaction);
+                $reaction_color = collect($colors)->first(fn ($i, $k) => $k === $interaction->reaction);
+            } elseif ($interaction->liked) {
+                $reaction_icon = $icons['like'][0] ?? '';
+                $reaction_color = $colors['like'][0] ?? '';
+            }
+
             $data = $data->merge([
                 'saved' => $interaction->saved,
                 'voted' => $interaction->votes > 0,
@@ -51,6 +66,13 @@ trait HasSocialInteractions
                 'ownvotes' => $interaction->votes,
                 'disliked' => $interaction->disliked,
                 'reaction' => $interaction->reaction,
+                'reaction_color' => @is_array($reaction_color) ? $reaction_color[0] : $reaction_color,
+                'state_icons' => [
+                    'saved' => @$interaction->saved ? $icons['save'][0] : $icons['save'][1],
+                    'voted' => @$interaction->saved ? $icons['vote'][0] : $icons['vote'][1],
+                    'disliked' => @$interaction->saved ? $icons['dislike'][0] : $icons['dislike'][1],
+                    'reaction' => @is_array($reaction_icon) ? $reaction_icon[0] : $reaction_icon,
+                ],
             ]);
         }
 
@@ -78,10 +100,8 @@ trait HasSocialInteractions
             throw InvalidInteractionException::dislikeDisabled();
         }
 
-        unset($a_list[0], $a_list[1]);
-
         if (
-            in_array($reaction, array_merge($a_list, config('social-interactions.available_reactions', [])), true) &&
+            in_array($reaction, array_merge(array_slice($a_list, 2), config('social-interactions.available_reactions', [])), true) &&
             !config('social-interactions.enable_reactions', false) &&
             $reaction !== 'like'
         ) {
@@ -112,7 +132,7 @@ trait HasSocialInteractions
     }
 
     /**
-     * Save a model model
+     * Save a model
      *
      * @param Model|CanSocialInteract $interactor
      * @param bool $save
@@ -133,7 +153,7 @@ trait HasSocialInteractions
     }
 
     /**
-     * Save a model model
+     * Save a model to list
      *
      * @param Model|CanSocialInteract $interactor
      * @param bool $save
@@ -201,7 +221,7 @@ trait HasSocialInteractions
      * @param Model|CanSocialInteract $interactor
      * @return SocialInteraction
      */
-    public function interactorReaction(Model|CanSocialInteract $interactor): SocialInteraction
+    public function modelInteraction(Model|CanSocialInteract $interactor): SocialInteraction
     {
         return $this->socialInteractions()
             ->whereInteractorType($interactor->getMorphClass())
@@ -304,7 +324,7 @@ trait HasSocialInteractions
     }
 
     /**
-     * Check if a model has been reacted to
+     * Check if a model has been liked
      *
      * @param Model|CanSocialInteract $interactor
      * @return bool
@@ -334,7 +354,7 @@ trait HasSocialInteractions
     }
 
     /**
-     * Check if a model has been reacted to
+     * Check if a model has been disliked
      *
      * @param Model|CanSocialInteract $interactor
      * @return bool

@@ -69,6 +69,21 @@ test('can vote item', function () {
     expect($post->isVoted($user))->toBeTrue();
 });
 
+test('can unvote item', function () {
+
+    config(['social-interactions.enable_unvote' => true]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $post = Post::factory()->create();
+
+    $r1 = $post->giveVote($user);
+    $r2 = $post->giveVote($user, false);
+
+    expect($r1->votes)->toBe(1);
+    expect($r2->votes)->toBe(0);
+    expect($post->isVoted($user))->toBeFalse();
+});
+
 test('can vote item multiple times', function () {
 
     config(['social-interactions.multiple_votes' => true]);
@@ -83,20 +98,6 @@ test('can vote item multiple times', function () {
 
     expect($r1->votes)->toBe(4);
     expect($post->isVoted($user))->toBeTrue();
-});
-
-test('can unvote item', function () {
-
-    config(['social-interactions.enable_unvote' => true]);
-
-    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
-    $post = Post::factory()->create();
-
-    $post->giveVote($user);
-    $r1 = $post->giveVote($user, false);
-
-    expect($r1->votes)->toBe(0);
-    expect($post->isVoted($user))->toBeFalse();
 });
 
 test('Uses only one interaction model', function () {
@@ -151,5 +152,5 @@ test('Is able to generate interaction data for the model', function () {
     $user4 = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
     $user4->leaveReaction($post, 'like');
 
-    expect(isset($post->socialInteractionData($user3)['votes']))->toBeTrue;
+    expect(isset($post->socialInteractionData($user3)['votes']))->toBeTrue();
 });

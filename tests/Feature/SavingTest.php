@@ -1,6 +1,5 @@
 <?php
 
-use ToneflixCode\SocialInteractions\Models\SocialInteraction;
 use ToneflixCode\SocialInteractions\Tests\Models\Post;
 
 test('can save item', function () {
@@ -57,4 +56,63 @@ test('can list saved items in a list', function () {
     Post::factory()->create()->toggleSaveToList($user, true, $list);
 
     expect($user->savedSocialInteracts()->list($list)->count())->tobe(4);
+});
+
+test('can get all saving list', function () {
+
+    config(['social-interactions.enable_save_lists' => true]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+
+    Post::factory()->create()->toggleSaveToList($user, true, 'default');
+    Post::factory()->create()->toggleSaveToList($user, true, 'default');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'dance');
+
+    $lists = $user->saved_social_lists;
+
+    expect($lists->count())->toBe(3);
+    expect($lists->contains('dance'))->toBeTrue();
+    expect($lists->contains('default'))->toBeTrue();
+    expect($lists->contains('reusable'))->toBeTrue();
+});
+
+test('can delete a saved list', function () {
+
+    config(['social-interactions.enable_save_lists' => true]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'dance');
+
+    $lists = $user->saved_social_lists;
+    expect($lists->count())->toBe(2);
+
+    $user->deleteSavedSocialList('reusable');
+
+    $user = $user->refresh();
+    $lists = $user->saved_social_lists;
+    expect($lists->count())->toBe(1);
+});
+
+test('can delete all saved lists', function () {
+
+    config(['social-interactions.enable_save_lists' => true]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'reusable');
+    Post::factory()->create()->toggleSaveToList($user, true, 'dance');
+
+    $user->deleteSavedSocialList(true);
+
+    $lists = $user->saved_social_lists;
+    expect($lists->count())->toBe(0);
 });
