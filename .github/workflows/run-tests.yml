@@ -45,7 +45,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install XDebug
-        run: sudo apt install -y php-xdebug
+        run: sudo apt update && sudo apt install -y php-xdebug
 
       - name: Install Matrix dependencies
         if: ${{ matrix.testbench && matrix.carbon }}
