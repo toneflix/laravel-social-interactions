@@ -32,9 +32,9 @@
         "illuminate/contracts": "^9.0|^10.0|^11.0",
         "imanghafoori/php-imports-analyzer": "^1.0",
         "laravel/pint": "^1.15",
-        "orchestra/testbench": "^8.8",
-        "pestphp/pest": "2.x-dev",
-        "pestphp/pest-plugin-laravel": "^2.0"
+        "orchestra/testbench": "^9.1",
+        "pestphp/pest": "2.34",
+        "pestphp/pest-plugin-laravel": "^2.4"
     },
     "autoload": {
         "psr-4": {
