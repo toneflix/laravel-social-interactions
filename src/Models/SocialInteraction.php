@@ -19,16 +19,16 @@ final class SocialInteraction extends Model
         'liked',
         'disliked',
         'reaction',
-        "interactor_id",
-        "interactor_type",
-        "interactable_id",
-        "interactable_type",
+        'interactor_id',
+        'interactor_type',
+        'interactable_id',
+        'interactable_type',
     ];
 
     /**
      * The model's attributes.
      *
-     * @var array<string, string|int|boolean>
+     * @var array<string, string|int|bool>
      */
     protected $attributes = [
         'votes' => 0,
@@ -53,8 +53,6 @@ final class SocialInteraction extends Model
 
     /**
      * Get the table associated with the model
-     *
-     * @return string
      */
     public function getTable(): string
     {

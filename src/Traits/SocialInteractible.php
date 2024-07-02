@@ -4,5 +4,5 @@ namespace ToneflixCode\SocialInteractions\Traits;
 
 trait SocialInteractible
 {
-    use HasSocialInteractions, CanSocialInteract;
+    use CanSocialInteract, HasSocialInteractions;
 }

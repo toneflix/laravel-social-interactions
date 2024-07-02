@@ -11,11 +11,8 @@ class Reaction implements CastsAttributes
     /**
      * Cast the given value.
      *
-     * @param Model $model
-     * @param string $key
-     * @param int|bool|string $val
+     * @param  int|bool|string  $val
      * @param  array<string, mixed>  $attributes
-     * @return string|null
      */
     public function get(Model $model, string $key, mixed $val, array $attributes): ?string
     {
@@ -27,11 +24,8 @@ class Reaction implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param Model $model
-     * @param string $key
-     * @param int|bool|string $val
+     * @param  int|bool|string  $val
      * @param  array<string, mixed>  $attributes
-     * @return string|null
      */
     public function set(Model $model, string $key, mixed $val, array $attributes): ?string
     {
@@ -48,9 +42,9 @@ class Reaction implements CastsAttributes
                 $reaction = $val;
             }
 
-            return (int)$reaction;
+            return (int) $reaction;
         }
 
-        return NULL;
+        return null;
     }
 }

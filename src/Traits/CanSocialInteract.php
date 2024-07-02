@@ -27,8 +27,6 @@ trait CanSocialInteract
 
     /**
      * Get the names of all social lists created
-     *
-     * @return Attribute
      */
     public function savedSocialLists(): Attribute
     {
@@ -39,9 +37,6 @@ trait CanSocialInteract
 
     /**
      * Delete a particular saved list or all list
-     *
-     * @param string|bool $name
-     * @return Collection
      */
     public function deleteSavedSocialList(string|bool $name): Collection
     {
@@ -57,13 +52,11 @@ trait CanSocialInteract
     /**
      * Leave a reaction on a model
      *
-     * @param Model|HasSocialInteractions $interactable
-     * @param integer|string $reaction
-     * @return SocialInteraction
+     * @param  int|string  $reaction
      */
     public function leaveReaction(Model|HasSocialInteractions $interactable, int|string|bool $reaction): SocialInteraction
     {
-        if (!method_exists($interactable, 'react')) {
+        if (! method_exists($interactable, 'react')) {
             throw InvalidInteractionException::message($interactable);
         }
 
