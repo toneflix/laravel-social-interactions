@@ -1,6 +1,6 @@
 {
     "name": "toneflix-code/social-interactions",
-    "description": "A Laravel package to add social interactions to your models.",
+    "description": "A Laravel package to add social interactions like likes, reactions, votes, saving/bookmarks e.t.c to your models.",
     "keywords": [
         "social",
         "like",
