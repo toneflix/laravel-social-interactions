@@ -2,6 +2,7 @@
 
 namespace ToneflixCode\SocialInteractions\Tests;
 
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -16,32 +17,28 @@ abstract class TestCase extends Orchestra
         UserFactory::class,
     ];
 
-    public function getEnvironmentSetUp($app)
-    {
-        loadEnv();
-
-        config()->set('app.key', 'base64:EWcFBKBT8lKlGK8nQhTHY+wg19QlfmbhtO9Qnn3NfcA=');
-
-        config()->set('database.default', 'testing');
-
-        config()->set('app.faker_locale', 'en_NG');
-
-        $migration = include __DIR__.'/database/migrations/create_posts_tables.php';
-        $migration->up();
-        $migration2 = include __DIR__.'/database/migrations/create_users_tables.php';
-        $migration2->up();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'ToneflixCode\\SocialInteractions\\Tests\\Database\\Factories\\'.
+            fn (string $modelName) => 'ToneflixCode\\SocialInteractions\\Tests\\Database\\Factories\\' .
                 class_basename(
                     $modelName
-                ).'Factory'
+                ) . 'Factory'
         );
+    }
+
+    protected function defineEnvironment($app)
+    {
+        tap($app['config'], function (Repository $config) {
+            $config->set('app.faker_locale', 'en_NG');
+        });
+    }
+
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
     }
 
     protected function getPackageProviders($app)
