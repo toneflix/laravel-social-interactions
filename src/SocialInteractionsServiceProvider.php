@@ -16,32 +16,37 @@ class SocialInteractionsServiceProvider extends ServiceProvider
         /*
          * Optional methods to load your package assets
          */
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        if ($this->unmigrated('create_social_interactions_table') || $this->unmigrated('create_social_interactions_table')) {
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        }
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('social-interactions.php'),
+                __DIR__ . '/../config/config.php' => config_path('social-interactions.php'),
             ], 'social-interactions-config');
 
-            $check = fn (string $table) => empty(array_filter(
-                File::files(base_path('database/migrations')),
-                function (SplFileInfo $file) use ($table) {
-                    return str($file->getBasename())->contains($table);
-                }
-            ));
-
-            if ($check('create_social_interactions_table')) {
+            if ($this->unmigrated('create_social_interactions_table')) {
                 $this->publishes([
-                    __DIR__.'/../database/migrations/2024_06_30_213055_create_social_interactions_table.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_social_interactions_table.php'),
+                    __DIR__ . '/../database/migrations/2024_06_30_213055_create_social_interactions_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_interactions_table.php'),
                 ], 'social-interactions-migrations');
             }
 
-            if ($check('create_social_interaction_saves_table')) {
+            if ($this->unmigrated('create_social_interaction_saves_table')) {
                 $this->publishes([
-                    __DIR__.'/../database/migrations/2024_06_30_213055_create_social_interaction_saves_table.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_social_interaction_saves_table.php'),
+                    __DIR__ . '/../database/migrations/2024_06_30_213056_create_social_interaction_saves_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_social_interaction_saves_table.php'),
                 ], 'social-interactions-migrations');
             }
         }
+    }
+
+    protected function unmigrated(string $table)
+    {
+        return empty(array_filter(
+            File::files(base_path('database/migrations')),
+            function (SplFileInfo $file) use ($table) {
+                return str($file->getBasename())->contains($table);
+            }
+        ));
     }
 
     /**
@@ -50,7 +55,7 @@ class SocialInteractionsServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'social-interactions');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'social-interactions');
 
         // Register the main class to use with the facade
         $this->app->singleton('social-interactions', function () {
