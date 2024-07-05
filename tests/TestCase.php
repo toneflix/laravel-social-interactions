@@ -22,10 +22,10 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'ToneflixCode\\SocialInteractions\\Tests\\Database\\Factories\\' .
+            fn (string $modelName) => 'ToneflixCode\\SocialInteractions\\Tests\\Database\\Factories\\'.
                 class_basename(
                     $modelName
-                ) . 'Factory'
+                ).'Factory'
         );
     }
 
@@ -38,7 +38,7 @@ abstract class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
     protected function getPackageProviders($app)
