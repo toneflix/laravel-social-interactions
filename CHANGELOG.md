@@ -2,6 +2,10 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.0.1 - 2024-07-05
+
+Fixes issues with migration
+
 ## 1.0.0 - 201X-XX-XX
 
--   initial release
+- initial release
