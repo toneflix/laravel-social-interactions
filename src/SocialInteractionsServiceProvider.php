@@ -2,9 +2,9 @@
 
 namespace ToneflixCode\SocialInteractions;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -56,13 +56,13 @@ class SocialInteractionsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (!Stringable::hasMacro('pastTense')) {
+        if (! Stringable::hasMacro('pastTense')) {
             Stringable::macro('pastTense', function () {
                 return $this->replace($this, Helpers::convertToPastTense($this->toString()));
             });
         }
 
-        if (!Str::hasMacro('pastTense')) {
+        if (! Str::hasMacro('pastTense')) {
             Str::macro('pastTense', function () {
                 return str($this)->pastTense();
             });

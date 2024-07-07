@@ -57,13 +57,13 @@ final class Helpers
         $lastTwoChars = substr($word, -2);
 
         if ($lastChar == 'e') {
-            return $word . 'd';
-        } elseif ($lastTwoChars == 'y' && !in_array(substr($word, -3, 1), ['a', 'e', 'i', 'o', 'u'])) {
-            return substr($word, 0, -1) . 'ied';
+            return $word.'d';
+        } elseif ($lastTwoChars == 'y' && ! in_array(substr($word, -3, 1), ['a', 'e', 'i', 'o', 'u'])) {
+            return substr($word, 0, -1).'ied';
         } elseif (in_array($lastChar, ['a', 'i', 'o', 'u', 'l', 'r', 'n'])) {
-            return $word . $lastChar . 'ed';
+            return $word.$lastChar.'ed';
         } else {
-            return $word . 'ed';
+            return $word.'ed';
         }
     }
 }
