@@ -10,7 +10,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @method \Illuminate\Support\Stringable replace(string|iterable $search, string|iterable $replace, $caseSensitive = true)
- * @method strin toString()
+ * @method string toString()
  */
 class SocialInteractionsServiceProvider extends ServiceProvider
 {
@@ -60,13 +60,13 @@ class SocialInteractionsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (! Stringable::hasMacro('pastTense')) {
+        if (!Stringable::hasMacro('pastTense')) {
             Stringable::macro('pastTense', function () {
                 return $this->replace($this, Helpers::convertToPastTense($this->toString()));
             });
         }
 
-        if (! Str::hasMacro('pastTense')) {
+        if (!Str::hasMacro('pastTense')) {
             Str::macro('pastTense', function () {
                 return str($this)->pastTense();
             });
