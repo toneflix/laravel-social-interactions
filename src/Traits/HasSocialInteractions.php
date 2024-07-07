@@ -35,7 +35,7 @@ trait HasSocialInteractions
             'votes' => $this->socialInteractions()->sum('votes'),
             'likes' => $this->socialInteractions()->whereLiked(true)->count(),
             'dislikes' => $this->socialInteractions()->whereDisliked(true)->count(),
-            'reactions' => $this->socialInteractions()->whereNotNull('reactions')->count(),
+            'reactions' => $this->socialInteractions()->whereNotNull('reaction')->count(),
         ]);
 
         if ($interactor) {
@@ -85,17 +85,17 @@ trait HasSocialInteractions
         $allowed = in_array($reaction, $a_list);
         $reactions = array_merge(config('social-interactions.available_reactions'), ['dislike']);
 
-        if (! is_bool($reaction) && ! $allowed && ! in_array($reaction, $reactions)) {
+        if (!is_bool($reaction) && !$allowed && !in_array($reaction, $reactions)) {
             throw InvalidInteractionException::invalidReaction();
         }
 
-        if (! config('social-interactions.enable_dislikes', false) && $reaction === 'dislike') {
+        if (!config('social-interactions.enable_dislikes', false) && $reaction === 'dislike') {
             throw InvalidInteractionException::dislikeDisabled();
         }
 
         if (
             in_array($reaction, array_merge(array_slice($a_list, 2), config('social-interactions.available_reactions', [])), true) &&
-            ! config('social-interactions.enable_reactions', false) &&
+            !config('social-interactions.enable_reactions', false) &&
             $reaction !== 'like'
         ) {
             throw InvalidInteractionException::reactionsDisabled();
@@ -106,9 +106,9 @@ trait HasSocialInteractions
             'interactor_type' => $interactor->getMorphClass(),
         ]);
 
-        $liked = in_array($reaction, ['like', 1, true], true) ? (! $interaction?->liked) : false;
+        $liked = in_array($reaction, ['like', 1, true], true) ? (!$interaction?->liked) : false;
         $interaction->liked = $reaction === 'dislike' ? false : $liked;
-        $interaction->disliked = $reaction === 'dislike' ? ! $interaction?->disliked : false;
+        $interaction->disliked = $reaction === 'dislike' ? !$interaction?->disliked : false;
         $interaction->reaction = $reaction;
         $interaction->save();
 
@@ -116,7 +116,7 @@ trait HasSocialInteractions
             ? 'liked'
             : (config('social-interactions.enable_reactions', false)
                 ? 'reaction'
-                : (['', 'liked'][$reaction] ?? $reaction.'d')
+                : (['', 'liked'][$reaction] ?? $reaction . 'd')
             );
 
         SocialInteractionDone::dispatch($interaction, $set);
@@ -150,7 +150,7 @@ trait HasSocialInteractions
         string $list_name = 'default',
         bool $public = false,
     ): SocialInteractionSave {
-        if (! config('social-interactions.enable_save_lists', false)) {
+        if (!config('social-interactions.enable_save_lists', false)) {
             throw InvalidInteractionException::saveListDisabled();
         }
 
