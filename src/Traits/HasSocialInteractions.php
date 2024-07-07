@@ -31,11 +31,29 @@ trait HasSocialInteractions
      */
     public function socialInteractionData(Model|CanSocialInteract|null $interactor = null): Collection
     {
+        $map = [
+            'vote' => str(config('social-interactions.key_maps.vote', 'vote'))->toString(),
+            'like' => str(config('social-interactions.key_maps.like', 'like'))->toString(),
+            'dislike' => str(config('social-interactions.key_maps.dislike', 'dislike'))->toString(),
+            'reaction' => str(config('social-interactions.key_maps.reaction', 'reaction'))->toString(),
+
+            'votes' => str(config('social-interactions.key_maps.vote', 'vote'))->plural(2)->toString(),
+            'likes' => str(config('social-interactions.key_maps.like', 'like'))->plural(2)->toString(),
+            'dislikes' => str(config('social-interactions.key_maps.dislike', 'dislike'))->plural(2)->toString(),
+            'reactions' => str(config('social-interactions.key_maps.reaction', 'reaction'))->plural(2)->toString(),
+
+            'saved' => str(config('social-interactions.key_maps.save', 'save'))->pastTense()->toString(),
+            'voted' => str(config('social-interactions.key_maps.vote', 'vote'))->pastTense()->toString(),
+            'liked' => str(config('social-interactions.key_maps.like', 'like'))->pastTense()->toString(),
+            'reacted' => str(config('social-interactions.key_maps.react', 'react'))->pastTense()->toString(),
+            'disliked' => str(config('social-interactions.key_maps.dislike', 'dislike'))->pastTense()->toString(),
+        ];
+
         $data = new Collection([
-            'votes' => $this->socialInteractions()->sum('votes'),
-            'likes' => $this->socialInteractions()->whereLiked(true)->count(),
-            'dislikes' => $this->socialInteractions()->whereDisliked(true)->count(),
-            'reactions' => $this->socialInteractions()->whereNotNull('reaction')->count(),
+            $map['votes'] => (int) $this->socialInteractions()->sum('votes'),
+            $map['likes'] => (int) $this->socialInteractions()->whereLiked(true)->count(),
+            $map['dislikes'] => (int) $this->socialInteractions()->whereDisliked(true)->count(),
+            $map['reactions'] => (int) $this->socialInteractions()->whereNotNull('reaction')->count(),
         ]);
 
         if ($interactor) {
@@ -56,19 +74,19 @@ trait HasSocialInteractions
             }
 
             $data = $data->merge([
-                'saved' => $interaction->saved,
-                'voted' => $interaction->votes > 0,
-                'liked' => $interaction->liked,
-                'reacted' => $interaction->liked || $interaction->reaction,
-                'ownvotes' => $interaction->votes,
-                'disliked' => $interaction->disliked,
-                'reaction' => $interaction->reaction,
-                'reaction_color' => @is_array($reaction_color) ? $reaction_color[0] : $reaction_color,
+                $map['saved'] => $interaction->saved,
+                $map['voted'] => $interaction->votes > 0,
+                $map['liked'] => $interaction->liked,
+                $map['reacted'] => $interaction->liked || $interaction->reaction,
+                "own{$map['votes']}" => $interaction->votes,
+                $map['disliked'] => $interaction->disliked,
+                $map['reaction'] => $interaction->reaction,
+                "{$map['reaction']}_color" => @is_array($reaction_color) ? $reaction_color[0] : $reaction_color,
                 'state_icons' => [
-                    'saved' => @$interaction->saved ? $icons['save'][0] : $icons['save'][1],
-                    'voted' => @$interaction->saved ? $icons['vote'][0] : $icons['vote'][1],
-                    'disliked' => @$interaction->saved ? $icons['dislike'][0] : $icons['dislike'][1],
-                    'reaction' => @is_array($reaction_icon) ? $reaction_icon[0] : $reaction_icon,
+                    $map['saved'] => @$interaction->saved ? $icons['save'][0] : $icons['save'][1],
+                    $map['voted'] => @$interaction->saved ? $icons['vote'][0] : $icons['vote'][1],
+                    $map['disliked'] => @$interaction->saved ? $icons['dislike'][0] : $icons['dislike'][1],
+                    $map['reaction'] => @is_array($reaction_icon) ? $reaction_icon[0] : $reaction_icon,
                 ],
             ]);
         }

@@ -23,6 +23,23 @@ return [
 
     /**
      * ==========================================================
+     * Key maps will be used to represent your data whenever possible
+     * ==========================================================
+     */
+    'key_maps' => [
+        'vote' => 'vote',
+        'like' => 'like',
+        'save' => 'save',
+        'react' => 'react',
+        'dislike' => 'dislike',
+        'reaction' => 'reaction',
+        // 'saved' => 'saved',
+        // 'voted' => 'voted',
+        // 'disliked' => 'disliked',
+    ],
+
+    /**
+     * ==========================================================
      * This should be equivalent to any icon library you're using
      * Here we have used font awesome icon as default
      * ==========================================================
