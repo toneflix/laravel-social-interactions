@@ -33,9 +33,6 @@ return [
         'react' => 'react',
         'dislike' => 'dislike',
         'reaction' => 'reaction',
-        // 'saved' => 'saved',
-        // 'voted' => 'voted',
-        // 'disliked' => 'disliked',
     ],
 
     /**
