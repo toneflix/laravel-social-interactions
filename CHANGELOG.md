@@ -2,6 +2,12 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.0.4 - 2024-07-11
+
+Add list name attribute to interation data array.
+
+**Full Changelog**: https://github.com/toneflix/laravel-social-interactions/compare/1.0.3...1.0.4
+
 ## 1.0.3 - 2024-07-11
 
 1. Associates saved items to other interactions
