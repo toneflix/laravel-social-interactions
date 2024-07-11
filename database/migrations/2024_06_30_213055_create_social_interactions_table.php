@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create(config('social-interactions.tables.interactions', 'social_interactions'), function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->nullableMorphs('interactor');
             $table->nullableMorphs('interactable');
             $table->boolean('saved')->nullable()->default(false);

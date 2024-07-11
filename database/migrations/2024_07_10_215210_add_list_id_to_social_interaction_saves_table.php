@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table(config('social-interactions.tables.saves', 'social_interaction_saves'), function (Blueprint $table) {
             $table->foreignId('interaction_id')
                 ->nullable()
+                ->after('interactor_id')
                 ->constrained(config('social-interactions.tables.interactions', 'social_interactions'))
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
