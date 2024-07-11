@@ -134,7 +134,6 @@ final class SocialInteraction extends Model
                 ],
             ]);
 
-
             return $data;
         });
     }

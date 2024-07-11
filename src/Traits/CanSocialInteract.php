@@ -61,7 +61,7 @@ trait CanSocialInteract
      */
     public function leaveReaction(Model|HasSocialInteractions $interactable, int|string|bool $reaction): SocialInteraction
     {
-        if (!method_exists($interactable, 'react')) {
+        if (! method_exists($interactable, 'react')) {
             throw InvalidInteractionException::message($interactable);
         }
 
