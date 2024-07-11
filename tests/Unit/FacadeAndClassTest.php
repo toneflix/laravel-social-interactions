@@ -39,8 +39,25 @@ test('can save item to list', function () {
 
     $r1 = SocialInteractions::toggleSaveToList($post, $user, true, $list);
 
-    expect($r1->saveable->is($post))->tobeTrue();
+    expect($r1->savedItem->saveable->is($post))->toBeTrue();
     expect(SocialInteractions::isSaved($post, $user, $list))->toBeTrue();
+});
+
+test('can unsave item from list', function () {
+
+    config(['social-interactions.enable_save_lists' => true]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $post = Post::factory()->create();
+    $list = 'default';
+
+    $r1 = SocialInteractions::toggleSaveToList($post, $user, true, $list);
+    expect($r1->savedItem->saveable->is($post))->toBeTrue();
+    expect(SocialInteractions::isSaved($post, $user, $list))->toBeTrue();
+
+    $r2 = SocialInteractions::toggleSaveToList($post, $user, false, $list);
+    expect($r2->savedItem)->toBeNull();
+    expect(SocialInteractions::isSaved($post, $user, $list))->toBeFalse();
 });
 
 test('can delete a saved list', function () {

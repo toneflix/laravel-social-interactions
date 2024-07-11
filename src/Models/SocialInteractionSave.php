@@ -4,6 +4,7 @@ namespace ToneflixCode\SocialInteractions\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 final class SocialInteractionSave extends Model
@@ -16,6 +17,8 @@ final class SocialInteractionSave extends Model
     protected $fillable = [
         'interactor_type',
         'interactor_id',
+        'saveable_type',
+        'saveable_id',
         'list_name',
         'public',
     ];
@@ -29,6 +32,16 @@ final class SocialInteractionSave extends Model
         'list_name' => 'default',
         'public' => false,
     ];
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        parent::deleting(function (self $model) {
+            $model->interaction->saved = false;
+            $model->interaction->save();
+        });
+    }
 
     /**
      * Get the table associated with the model
@@ -58,5 +71,10 @@ final class SocialInteractionSave extends Model
     public function scopeList(Builder $query, $list = 'default'): void
     {
         $query->whereListName($list);
+    }
+
+    public function interaction(): BelongsTo
+    {
+        return $this->belongsTo(SocialInteraction::class, 'interaction_id');
     }
 }

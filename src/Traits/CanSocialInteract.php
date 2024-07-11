@@ -43,6 +43,11 @@ trait CanSocialInteract
         if ($name === true) {
             $this->savedSocialInteracts()->delete();
         } else {
+            $list = $this->savedSocialInteracts()->whereListName($name)->first();
+            if ($list) {
+                $list->interaction->saved = false;
+                $list->interaction->save();
+            }
             $this->savedSocialInteracts()->whereListName($name)->delete();
         }
 
@@ -56,7 +61,7 @@ trait CanSocialInteract
      */
     public function leaveReaction(Model|HasSocialInteractions $interactable, int|string|bool $reaction): SocialInteraction
     {
-        if (! method_exists($interactable, 'react')) {
+        if (!method_exists($interactable, 'react')) {
             throw InvalidInteractionException::message($interactable);
         }
 

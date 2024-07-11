@@ -153,4 +153,5 @@ test('Is able to generate interaction data for the model', function () {
     $user4->leaveReaction($post, 'like');
 
     expect(isset($post->socialInteractionData($user3)['votes']))->toBeTrue();
+    expect($post->socialInteractionData($user3)['voted'])->toBeTrue();
 });
