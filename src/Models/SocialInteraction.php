@@ -119,6 +119,7 @@ final class SocialInteraction extends Model
 
             $data = $data->merge([
                 $map['saved'] => $this->saved,
+                'list_name' => $this->savedItem->list_name ?? null,
                 $map['voted'] => $this->votes > 0,
                 $map['liked'] => $this->liked,
                 $map['reacted'] => $this->liked || $this->reaction,
