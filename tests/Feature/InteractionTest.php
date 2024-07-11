@@ -155,3 +155,30 @@ test('Is able to generate interaction data for the model', function () {
     expect(isset($post->socialInteractionData($user3)['votes']))->toBeTrue();
     expect($post->socialInteractionData($user3)['voted'])->toBeTrue();
 });
+
+test('Is able to generate interaction data for the model without a user', function () {
+
+    config([
+        'social-interactions.enable_dislikes' => true,
+        'social-interactions.enable_reactions' => true,
+        'social-interactions.multiple_votes' => true,
+    ]);
+
+    $user = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $post = Post::factory()->create();
+
+    $user->leaveReaction($post, 'like');
+    $post->toggleSave($user, true);
+    $post->giveVote($user);
+
+    $user2 = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $user2->leaveReaction($post, 'love');
+    $post->giveVote($user2);
+    $post->giveVote($user2);
+
+    $user4 = \ToneflixCode\SocialInteractions\Tests\Models\User::factory()->create();
+    $user4->leaveReaction($post, 'like');
+
+    expect(isset($post->socialInteractionData()['votes']))->toBeTrue();
+    expect($post->socialInteractionData()['voted'] ?? 'unset')->toBe('unset');
+});
