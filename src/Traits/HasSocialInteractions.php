@@ -65,17 +65,17 @@ trait HasSocialInteractions
         $allowed = in_array($reaction, $a_list);
         $reactions = array_merge(config('social-interactions.available_reactions'), ['dislike']);
 
-        if (!is_bool($reaction) && !$allowed && !in_array($reaction, $reactions)) {
+        if (! is_bool($reaction) && ! $allowed && ! in_array($reaction, $reactions)) {
             throw InvalidInteractionException::invalidReaction();
         }
 
-        if (!config('social-interactions.enable_dislikes', false) && $reaction === 'dislike') {
+        if (! config('social-interactions.enable_dislikes', false) && $reaction === 'dislike') {
             throw InvalidInteractionException::dislikeDisabled();
         }
 
         if (
             in_array($reaction, array_merge(array_slice($a_list, 2), config('social-interactions.available_reactions', [])), true) &&
-            !config('social-interactions.enable_reactions', false) &&
+            ! config('social-interactions.enable_reactions', false) &&
             $reaction !== 'like'
         ) {
             throw InvalidInteractionException::reactionsDisabled();
@@ -86,9 +86,9 @@ trait HasSocialInteractions
             'interactor_type' => $interactor->getMorphClass(),
         ]);
 
-        $liked = in_array($reaction, ['like', 1, true], true) ? (!$interaction?->liked) : false;
+        $liked = in_array($reaction, ['like', 1, true], true) ? (! $interaction?->liked) : false;
         $interaction->liked = $reaction === 'dislike' ? false : $liked;
-        $interaction->disliked = $reaction === 'dislike' ? !$interaction?->disliked : false;
+        $interaction->disliked = $reaction === 'dislike' ? ! $interaction?->disliked : false;
         $interaction->reaction = $reaction;
         $interaction->save();
 
@@ -96,7 +96,7 @@ trait HasSocialInteractions
             ? 'liked'
             : (config('social-interactions.enable_reactions', false)
                 ? 'reaction'
-                : (['', 'liked'][$reaction] ?? $reaction . 'd')
+                : (['', 'liked'][$reaction] ?? $reaction.'d')
             );
 
         SocialInteractionDone::dispatch($interaction, $set);
@@ -116,7 +116,7 @@ trait HasSocialInteractions
             'saved' => $save,
         ]);
 
-        if (!$skipEvent) {
+        if (! $skipEvent) {
             SocialInteractionDone::dispatch($interaction, 'saved');
         }
 
@@ -132,7 +132,7 @@ trait HasSocialInteractions
         string $list_name = 'default',
         bool $public = false,
     ): SocialInteraction {
-        if (!config('social-interactions.enable_save_lists', false)) {
+        if (! config('social-interactions.enable_save_lists', false)) {
             throw InvalidInteractionException::saveListDisabled();
         }
 
@@ -205,7 +205,7 @@ trait HasSocialInteractions
         $query->whereHas(
             'socialInteractions',
             function ($qx) use ($interactor, $list) {
-                $qx->where(function ($q) use ($interactor, $list) {
+                $qx->where(function ($q) use ($interactor) {
                     $q->whereInteractorType($interactor->getMorphClass())
                         ->whereInteractorId($interactor->id)
                         ->whereSaved(true);
