@@ -21,6 +21,7 @@ Laravel Social Interactions adds to your project the ability to create social in
     -   [Votes](#votes)
     -   [Saving](#saving)
     -   [Accessing the interaction relationship](#accessing-the-interaction-relationship)
+    -   [Accessing the interactor relationship](#accessing-the-interactor-relationship)
     -   [Accessing the interaction relationship for the interacting model](#accessing-the-interaction-relationship-for-the-interacting-model)
     -   [Get Model Interaction for a specific Interactor](#get-model-interaction-for-a-specific-interactor)
     -   [Get Interaction Data](#get-interaction-data)
@@ -363,6 +364,20 @@ OR
 $post = \App\Models\Post::find(1);
 
 $interactions = $post->socialInteractions()->orderBy('id')->paginate(10);
+```
+
+### Accessing the interactor relationship
+
+The interactor relationship which represent the model (or user) that interacted with the model can be accessed from the `interactor` property or method (if you need finer grain control and access to the Eloquent builder instance) on the `SocialInteraction` model.
+
+```php
+$post = \App\Models\Post::find(1);
+
+$interactions = $post->socialInteractions;
+
+foreach ($interactions as $interaction) {
+    $interactor = $interaction->interactor;
+}
 ```
 
 ### Accessing the interaction relationship for the interacting model

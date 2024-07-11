@@ -67,6 +67,11 @@ final class SocialInteraction extends Model
         return $this->morphTo();
     }
 
+    public function interactor(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public function savedItem(): HasOne
     {
         return $this->hasOne(SocialInteractionSave::class, 'interaction_id');
