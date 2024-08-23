@@ -2,6 +2,12 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.0.6 - 2024-08-23
+
+- Increment migration file name by the second during publishing.
+
+**Full Changelog**: https://github.com/toneflix/laravel-social-interactions/compare/1.0.5...1.0.6
+
 ## 1.0.5 - 2024-08-23
 
 - Rename migrations to allow for proper order when published.
