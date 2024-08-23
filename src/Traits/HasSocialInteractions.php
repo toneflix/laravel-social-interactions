@@ -31,7 +31,7 @@ trait HasSocialInteractions
      */
     public function socialInteractionData(Model|CanSocialInteract|null $interactor = null): Collection
     {
-        $data = new Collection();
+        $data = new Collection;
 
         if ($interactor) {
             $interaction = $this->modelInteraction($interactor)->interactionData;
