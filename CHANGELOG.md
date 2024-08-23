@@ -2,6 +2,11 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.0.5 - 2024-08-23
+
+- Rename migrations to allow for proper order when published.
+- **Full Changelog**: https://github.com/toneflix/laravel-social-interactions/compare/1.0.4...1.0.5
+
 ## 1.0.4 - 2024-07-11
 
 Add list name attribute to interation data array.
