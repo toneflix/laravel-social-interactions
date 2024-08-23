@@ -23,32 +23,32 @@ class SocialInteractionsServiceProvider extends ServiceProvider
          * Optional methods to load your package assets
          */
         if ($this->unmigrated('create_social_interactions_table') || $this->unmigrated('create_social_interactions_table')) {
-            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('social-interactions.php'),
+                __DIR__.'/../config/config.php' => config_path('social-interactions.php'),
             ], 'social-interactions-config');
 
             if ($this->unmigrated('create_social_interactions_table')) {
                 $time = now()->format('Y_m_d_His');
                 $this->publishes([
-                    __DIR__ . '/../database/migrations/2024_06_30_213055_create_social_interactions_table.php' => database_path('migrations/' . $time . '_create_social_interactions_table.php'),
+                    __DIR__.'/../database/migrations/2024_06_30_213055_create_social_interactions_table.php' => database_path('migrations/'.$time.'_create_social_interactions_table.php'),
                 ], 'social-interactions-migrations');
             }
 
             if ($this->unmigrated('create_social_interaction_saves_table')) {
                 $time = now()->addSeconds(1)->format('Y_m_d_His');
                 $this->publishes([
-                    __DIR__ . '/../database/migrations/2024_06_30_213056_create_social_interaction_saves_table.php' => database_path('migrations/' . $time . '_create_social_interaction_saves_table.php'),
+                    __DIR__.'/../database/migrations/2024_06_30_213056_create_social_interaction_saves_table.php' => database_path('migrations/'.$time.'_create_social_interaction_saves_table.php'),
                 ], 'social-interactions-migrations');
             }
 
             if ($this->unmigrated('update_social_interaction_saves_table_add_list_id')) {
                 $time = now()->addSeconds(2)->format('Y_m_d_His');
                 $this->publishes([
-                    __DIR__ . '/../database/migrations/2024_07_10_215210_update_social_interaction_saves_table_add_list_id.php' => database_path('migrations/' . $time . '_update_social_interaction_saves_table_add_list_id.php'),
+                    __DIR__.'/../database/migrations/2024_07_10_215210_update_social_interaction_saves_table_add_list_id.php' => database_path('migrations/'.$time.'_update_social_interaction_saves_table_add_list_id.php'),
                 ], 'social-interactions-migrations');
             }
         }
@@ -82,7 +82,7 @@ class SocialInteractionsServiceProvider extends ServiceProvider
         }
 
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'social-interactions');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'social-interactions');
 
         // Register the main class to use with the facade
         $this->app->singleton('social-interactions', function () {
