@@ -25,11 +25,11 @@
     ],
     "require": {
         "php": "^8.2|^8.3",
-        "illuminate/support": "^10.0|^11.0|^21.0"
+        "illuminate/support": "^11.0|^21.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
-        "illuminate/contracts": "^10.0|^11.0|^21.0",
+        "illuminate/contracts": "^11.0|^21.0",
         "imanghafoori/php-imports-analyzer": "^1.1",
         "laravel/pint": "^1.22",
         "orchestra/testbench": "^10.2",
