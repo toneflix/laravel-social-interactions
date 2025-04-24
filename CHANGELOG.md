@@ -2,6 +2,11 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.0.7 - 2025-04-24
+
+- Adds support for Laravel 12
+- Drops support for Laravel 10
+
 ## 1.0.6 - 2024-08-23
 
 - Increment migration file name by the second during publishing.
