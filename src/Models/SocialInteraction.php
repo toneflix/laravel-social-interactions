@@ -117,8 +117,8 @@ final class SocialInteraction extends Model
             $reaction_color = $colors['like'];
 
             if ($this->reaction) {
-                $reaction_icon = collect($icons)->first(fn ($i, $k) => $k === $this->reaction);
-                $reaction_color = collect($colors)->first(fn ($i, $k) => $k === $this->reaction);
+                $reaction_icon = collect($icons)->first(fn($i, $k) => $k === $this->reaction);
+                $reaction_color = collect($colors)->first(fn($i, $k) => $k === $this->reaction);
             } elseif ($this->liked) {
                 $reaction_icon = $icons['like'][0] ?? '';
                 $reaction_color = $colors['like'][0] ?? '';
@@ -158,9 +158,56 @@ final class SocialInteraction extends Model
                     ->whereSaved(true);
             })->orWhereHas(
                 'savedItem',
-                fn (Builder $q) => $q->when($list, fn (Builder $q) => $q->whereListName($list))
+                fn(Builder $q) => $q->when($list, fn(Builder $q) => $q->whereListName($list))
                     ->whereInteractorType($interactor->getMorphClass())
                     ->whereInteractorId($interactor->id)
             );
+    }
+
+    /**
+     * Scope to return only voted models
+     */
+    public function scopeIsVoted(Builder $query, Model|CanSocialInteract $interactor): void
+    {
+        $query->whereInteractorType($interactor->getMorphClass())
+            ->whereInteractorId($interactor->id)
+            ->where('votes', '>', 0);
+    }
+
+    /**
+     * Scope to return only models reacted to
+     */
+    public function scopeIsReacted(Builder $query, Model|CanSocialInteract $interactor): void
+    {
+        $query->whereInteractorType($interactor->getMorphClass())
+            ->whereInteractorId($interactor->id)
+            ->where(function (Builder $q) {
+                $q->whereLiked(true);
+                $q->orWhereNot('reaction', '=');
+            });
+    }
+
+    /**
+     * Scope to return only liked models
+     */
+    public function scopeIsLiked(Builder $query, Model|CanSocialInteract $interactor): void
+    {
+        $query->whereInteractorType($interactor->getMorphClass())
+            ->whereInteractorId($interactor->id)
+            ->where(function (Builder $q) {
+                $q->whereLiked(true);
+            });
+    }
+
+    /**
+     * Scope to return only liked models
+     */
+    public function scopeIsDisliked(Builder $query, Model|CanSocialInteract $interactor): void
+    {
+        $query->whereInteractorType($interactor->getMorphClass())
+            ->whereInteractorId($interactor->id)
+            ->where(function (Builder $q) {
+                $q->whereDisliked(true);
+            });
     }
 }
