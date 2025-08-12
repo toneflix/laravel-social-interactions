@@ -2,7 +2,6 @@
 
 namespace ToneflixCode\SocialInteractions\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
@@ -96,7 +95,7 @@ trait HasSocialInteractions
             ? 'liked'
             : (config('social-interactions.enable_reactions', false)
                 ? 'reaction'
-                : (['', 'liked'][$reaction] ?? $reaction . 'd')
+                : (['', 'liked'][$reaction] ?? $reaction.'d')
             );
 
         SocialInteractionDone::dispatch($interaction, $set);
