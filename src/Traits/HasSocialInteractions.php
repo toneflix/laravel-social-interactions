@@ -96,7 +96,7 @@ trait HasSocialInteractions
             ? 'liked'
             : (config('social-interactions.enable_reactions', false)
                 ? 'reaction'
-                : (['', 'liked'][$reaction] ?? $reaction . 'd')
+                : (['', 'liked'][$reaction] ?? $reaction.'d')
             );
 
         SocialInteractionDone::dispatch($interaction, $set);
@@ -212,7 +212,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn($q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn ($q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where('votes', '>', 0)
         );
@@ -233,7 +233,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn(Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where(function (Builder $q) {
                     $q->whereLiked(true);
@@ -257,7 +257,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn(Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where(function (Builder $q) {
                     $q->whereLiked(true);
@@ -280,7 +280,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn(Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where(function (Builder $q) {
                     $q->whereDisliked(true);
