@@ -2,6 +2,14 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.1.0 - 2025-08-12
+
+### What's Changed
+
+* refactor: refactor the library for best performance. by @3m1n3nc3 in https://github.com/toneflix/laravel-social-interactions/pull/19
+
+**Full Changelog**: https://github.com/toneflix/laravel-social-interactions/compare/1.0.7...1.1.0
+
 ## 1.0.7 - 2025-04-24
 
 - Adds support for Laravel 12
