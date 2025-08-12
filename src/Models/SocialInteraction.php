@@ -117,8 +117,8 @@ final class SocialInteraction extends Model
             $reaction_color = $colors['like'];
 
             if ($this->reaction) {
-                $reaction_icon = collect($icons)->first(fn($i, $k) => $k === $this->reaction);
-                $reaction_color = collect($colors)->first(fn($i, $k) => $k === $this->reaction);
+                $reaction_icon = collect($icons)->first(fn ($i, $k) => $k === $this->reaction);
+                $reaction_color = collect($colors)->first(fn ($i, $k) => $k === $this->reaction);
             } elseif ($this->liked) {
                 $reaction_icon = $icons['like'][0] ?? '';
                 $reaction_color = $colors['like'][0] ?? '';
@@ -154,7 +154,7 @@ final class SocialInteraction extends Model
         $query->where(function ($q) use ($list) {
             $q->whereSaved(true);
             if ($list) {
-                $q->orWhereHas('savedItem', fn(Builder $q) => $q->whereListName($list));
+                $q->orWhereHas('savedItem', fn (Builder $q) => $q->whereListName($list));
             }
         })
             ->whereInteractorType($interactor->getMorphClass())
