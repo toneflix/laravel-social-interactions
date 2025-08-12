@@ -96,7 +96,7 @@ trait HasSocialInteractions
             ? 'liked'
             : (config('social-interactions.enable_reactions', false)
                 ? 'reaction'
-                : (['', 'liked'][$reaction] ?? $reaction.'d')
+                : (['', 'liked'][$reaction] ?? $reaction . 'd')
             );
 
         SocialInteractionDone::dispatch($interaction, $set);
@@ -194,29 +194,7 @@ trait HasSocialInteractions
      */
     public function isSaved(Model|CanSocialInteract $interactor, ?string $list = null): bool
     {
-        return self::filterSaved($interactor, $list)->exists();
-    }
-
-    /**
-     * Scope to return only saved models
-     */
-    public function scopeFilterSaved(Builder $query, Model|CanSocialInteract $interactor, ?string $list = null): void
-    {
-        $query->whereHas(
-            'socialInteractions',
-            function ($qx) use ($interactor, $list) {
-                $qx->where(function ($q) use ($interactor) {
-                    $q->whereInteractorType($interactor->getMorphClass())
-                        ->whereInteractorId($interactor->id)
-                        ->whereSaved(true);
-                })->orWhereHas(
-                    'savedItem',
-                    fn (Builder $q) => $q->when($list, fn (Builder $q) => $q->whereListName($list))
-                        ->whereInteractorType($interactor->getMorphClass())
-                        ->whereInteractorId($interactor->id)
-                );
-            }
-        );
+        return $this->socialInteractions()->filterSaved($interactor, $list)->exists();
     }
 
     /**
@@ -234,7 +212,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn ($q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn($q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where('votes', '>', 0)
         );
@@ -255,7 +233,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn(Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where(function (Builder $q) {
                     $q->whereLiked(true);
@@ -279,7 +257,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn(Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where(function (Builder $q) {
                     $q->whereLiked(true);
@@ -302,7 +280,7 @@ trait HasSocialInteractions
     {
         $query->whereHas(
             'socialInteractions',
-            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
+            fn(Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
                 ->whereInteractorId($interactor->id)
                 ->where(function (Builder $q) {
                     $q->whereDisliked(true);
