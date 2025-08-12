@@ -2,7 +2,6 @@
 
 namespace ToneflixCode\SocialInteractions\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
@@ -194,29 +193,7 @@ trait HasSocialInteractions
      */
     public function isSaved(Model|CanSocialInteract $interactor, ?string $list = null): bool
     {
-        return self::filterSaved($interactor, $list)->exists();
-    }
-
-    /**
-     * Scope to return only saved models
-     */
-    public function scopeFilterSaved(Builder $query, Model|CanSocialInteract $interactor, ?string $list = null): void
-    {
-        $query->whereHas(
-            'socialInteractions',
-            function ($qx) use ($interactor, $list) {
-                $qx->where(function ($q) use ($interactor) {
-                    $q->whereInteractorType($interactor->getMorphClass())
-                        ->whereInteractorId($interactor->id)
-                        ->whereSaved(true);
-                })->orWhereHas(
-                    'savedItem',
-                    fn (Builder $q) => $q->when($list, fn (Builder $q) => $q->whereListName($list))
-                        ->whereInteractorType($interactor->getMorphClass())
-                        ->whereInteractorId($interactor->id)
-                );
-            }
-        );
+        return $this->socialInteractions()->filterSaved($interactor, $list)->exists();
     }
 
     /**
@@ -224,20 +201,7 @@ trait HasSocialInteractions
      */
     public function isVoted(Model|CanSocialInteract $interactor): bool
     {
-        return $this->query()->isVoted($interactor)->exists();
-    }
-
-    /**
-     * Scope to return only voted models
-     */
-    public function scopeIsVoted(Builder $query, Model|CanSocialInteract $interactor): void
-    {
-        $query->whereHas(
-            'socialInteractions',
-            fn ($q) => $q->whereInteractorType($interactor->getMorphClass())
-                ->whereInteractorId($interactor->id)
-                ->where('votes', '>', 0)
-        );
+        return $this->socialInteractions()->isVoted($interactor)->exists();
     }
 
     /**
@@ -245,23 +209,7 @@ trait HasSocialInteractions
      */
     public function isReacted(Model|CanSocialInteract $interactor): bool
     {
-        return $this->query()->isReacted($interactor)->exists();
-    }
-
-    /**
-     * Scope to return only models reacted to
-     */
-    public function scopeIsReacted(Builder $query, Model|CanSocialInteract $interactor): void
-    {
-        $query->whereHas(
-            'socialInteractions',
-            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
-                ->whereInteractorId($interactor->id)
-                ->where(function (Builder $q) {
-                    $q->whereLiked(true);
-                    $q->orWhereNot('reaction', '=');
-                })
-        );
+        return $this->socialInteractions()->isReacted($interactor)->exists();
     }
 
     /**
@@ -269,22 +217,7 @@ trait HasSocialInteractions
      */
     public function isLiked(Model|CanSocialInteract $interactor): bool
     {
-        return $this->query()->isLiked($interactor)->exists();
-    }
-
-    /**
-     * Scope to return only liked models
-     */
-    public function scopeIsLiked(Builder $query, Model|CanSocialInteract $interactor): void
-    {
-        $query->whereHas(
-            'socialInteractions',
-            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
-                ->whereInteractorId($interactor->id)
-                ->where(function (Builder $q) {
-                    $q->whereLiked(true);
-                })
-        );
+        return $this->socialInteractions()->isLiked($interactor)->exists();
     }
 
     /**
@@ -292,21 +225,6 @@ trait HasSocialInteractions
      */
     public function isDisliked(Model|CanSocialInteract $interactor): bool
     {
-        return $this->query()->isDisliked($interactor)->exists();
-    }
-
-    /**
-     * Scope to return only liked models
-     */
-    public function scopeIsDisliked(Builder $query, Model|CanSocialInteract $interactor): void
-    {
-        $query->whereHas(
-            'socialInteractions',
-            fn (Builder $q) => $q->whereInteractorType($interactor->getMorphClass())
-                ->whereInteractorId($interactor->id)
-                ->where(function (Builder $q) {
-                    $q->whereDisliked(true);
-                })
-        );
+        return $this->socialInteractions()->isDisliked($interactor)->exists();
     }
 }
