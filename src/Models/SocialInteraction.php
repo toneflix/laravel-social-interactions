@@ -2,12 +2,14 @@
 
 namespace ToneflixCode\SocialInteractions\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use ToneflixCode\SocialInteractions\Models\Casts\Reaction;
+use ToneflixCode\SocialInteractions\Traits\CanSocialInteract;
 
 final class SocialInteraction extends Model
 {
@@ -115,8 +117,8 @@ final class SocialInteraction extends Model
             $reaction_color = $colors['like'];
 
             if ($this->reaction) {
-                $reaction_icon = collect($icons)->first(fn ($i, $k) => $k === $this->reaction);
-                $reaction_color = collect($colors)->first(fn ($i, $k) => $k === $this->reaction);
+                $reaction_icon = collect($icons)->first(fn($i, $k) => $k === $this->reaction);
+                $reaction_color = collect($colors)->first(fn($i, $k) => $k === $this->reaction);
             } elseif ($this->liked) {
                 $reaction_icon = $icons['like'][0] ?? '';
                 $reaction_color = $colors['like'][0] ?? '';
@@ -142,5 +144,23 @@ final class SocialInteraction extends Model
 
             return $data;
         });
+    }
+
+    /**
+     * Scope to return only saved models
+     */
+    public function scopeFilterSaved(Builder $query, Model|CanSocialInteract $interactor, ?string $list = null): void
+    {
+        $query
+            ->where(function ($q) use ($interactor) {
+                $q->whereInteractorType($interactor->getMorphClass())
+                    ->whereInteractorId($interactor->id)
+                    ->whereSaved(true);
+            })->orWhereHas(
+                'savedItem',
+                fn(Builder $q) => $q->when($list, fn(Builder $q) => $q->whereListName($list))
+                    ->whereInteractorType($interactor->getMorphClass())
+                    ->whereInteractorId($interactor->id)
+            );
     }
 }
