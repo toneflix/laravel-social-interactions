@@ -1,4 +1,4 @@
-# Laravel Social Interactions
+# Laravel Social Interactions (Save, Votes, Like, Dislike, React)
 
 [![Test & Lint](https://github.com/toneflix/laravel-social-interactions/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/toneflix/laravel-social-interactions/actions/workflows/run-tests.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/toneflix-code/social-interactions.svg?style=flat-square&label=Latest+Stable+Version)](https://packagist.org/packages/toneflix-code/social-interactions) [![Total Downloads](https://img.shields.io/packagist/dt/toneflix-code/social-interactions.svg?style=flat-square)](https://packagist.org/packages/toneflix-code/social-interactions) [![Latest Unstable Version](https://img.shields.io/packagist/v/toneflix-code/social-interactions.svg?include_prereleases&style=flat-square&label=Latest+Unstable+Version)](https://packagist.org/packages/toneflix-code/social-interactions) [![License](https://img.shields.io/github/license/toneflix/laravel-social-interactions
