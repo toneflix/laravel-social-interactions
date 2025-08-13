@@ -2,6 +2,10 @@
 
 All notable changes to `social-interactions` will be documented in this file
 
+## 1.1.1 - 2025-08-13
+
+**Full Changelog**: https://github.com/toneflix/laravel-social-interactions/compare/1.1.0...1.1.1
+
 ## 1.1.0 - 2025-08-12
 
 ### What's Changed
